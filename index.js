@@ -6,7 +6,7 @@
   let lastTime
 
   const getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
-    def =(obj, prop, value)=> defineProperty(obj, prop,
+    def =(obj, prop, value)=> Object.defineProperty(obj, prop,
       {value, enumerable: false, editable: true, configurable: true})
 
   def(Object.prototype, 'c', function(label) {
