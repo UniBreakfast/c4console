@@ -2,16 +2,22 @@
 {
   global.c =(...args)=>
     console.log(...args) || args.length>1? args : args[0]
+
   let lastTime
-  const getTime =()=> new Date().toLocaleTimeString('en', {hour12: false})
-  Object.prototype.c = function(label) {
+
+  const getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
+    def =(obj, prop, value)=> defineProperty(obj, prop,
+      {value, enumerable: false, editable: true, configurable: true})
+
+  def(Object.prototype, 'c', function(label) {
     const time = getTime(),  val = this.valueOf()
     console.log(...time == lastTime? [] : [lastTime = time],
       ...typeof label=='string'? [label+':'] : typeof label=='number'?
         [label+'.'] : [], val)
     return val
-  }
-  Promise.prototype.c = function(label) {
+  })
+
+  def(Promise.prototype, 'c', function(label) {
     let onresolve = _ => _,  onreject = _ => _
     const time = getTime(),  start = new Date,  body = 'response body',
       report =(res, status)=> {
@@ -29,7 +35,7 @@
     }
     this.catch = prom.catch = cb => (onreject = cb) && prom
     return this
-  }
+  })
 }
 
 setTimeout(c, 1e9)
