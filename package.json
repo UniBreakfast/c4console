@@ -1,6 +1,6 @@
 {
   "name": "c4console",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Chainable any_value.c() for console.log(value) && return value in-place! MUCH more convenient than console.log(...) w/o vars or debugger when all you need is to see what's there at a point. Try it with promises! Also adds c(...args) function that are similar to console.log but returns what was passed into it as well.",
   "main": "index.js",
   "scripts": {
