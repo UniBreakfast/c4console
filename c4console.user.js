@@ -4,24 +4,24 @@
 // @match       *://*/*
 // @run-at      document-start
 // @grant       none
-// @version     3.0.6
+// @version     3.0.7
 // @author      Tut 'UniBreakfast' Ninin
 // @description 15.06.2020, 06:31:18
 // ==/UserScript==
 
-{
+if (!window.c4console) {
   let lastTime
 
   const getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
 
-    labelStyle = `font-size:.6rem;font-weight:bold;color:#a95;background:#56a5;
+    labelStyle = `font-size:.6rem;font-weight:bold;color:#ee6d;background:#56ab;
       border-radius:4px;`,
     img =(src, size=0.4, label=' ')=> {
       if (src.match(/^data:image\/.*;base64,/))
         return assign(new Image(), {src, onload() {
           log(`%c${label}`, labelStyle+`background: no-repeat url(${src});
             padding:0 ${this.width*size}px ${this.height*size}px 4px;
-              background-size:contain`)
+              border-radius:0;background-size:contain`)
         }})
       fetch(src).then(r => r.blob()).then(blob => assign(new FileReader(),
         {onload() { img(this.result, size) }}).readAsDataURL(blob))
