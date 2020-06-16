@@ -4,7 +4,7 @@
 // @match       *://*/*
 // @run-at      document-start
 // @grant       none
-// @version     3.0.5
+// @version     3.0.6
 // @author      Tut 'UniBreakfast' Ninin
 // @description 15.06.2020, 06:31:18
 // ==/UserScript==
@@ -14,10 +14,12 @@
 
   const getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
 
+    labelStyle = `font-size:.6rem;font-weight:bold;color:#a95;background:#56a5;
+      border-radius:4px;`,
     img =(src, size=0.4, label=' ')=> {
       if (src.match(/^data:image\/.*;base64,/))
         return assign(new Image(), {src, onload() {
-          log(`%c${label}`,`background: no-repeat url(${src});
+          log(`%c${label}`, labelStyle+`background: no-repeat url(${src});
             padding:0 ${this.width*size}px ${this.height*size}px 4px;
               background-size:contain`)
         }})
@@ -28,7 +30,7 @@
     ls = localStorage,  {defineProperty, assign} = Object,  {log, dir} = console,
     objProto = Object.prototype,  promProto = Promise.prototype,   win = window,
     def =(obj, prop, value)=> defineProperty(obj, prop,
-      {value, enumerable: false, editable: true, configurable: true})
+      {value, enumerable: false, editable: true, configurable: true}),
 
   c4 = win.c4console = {
     cGlobalFn: (...args)=> (args.length==1 && (args[0] instanceof Element ||
@@ -36,10 +38,12 @@
 
     cGenericMethod(label) {
       const time = getTime(),  val = this.valueOf(),
-        isDOMel = val instanceof Element || val==document
-      log(...time == lastTime? [] : [lastTime = time],
+        isDOMel = val instanceof Element || val==document,
+        labelParts = [...time == lastTime? [] : [lastTime = time],
         ...typeof label=='string'? [label+':'] : typeof label=='number'?
-          [label+'.'] : [], ...isDOMel? [] : [val])
+          [label+'.'] : []]
+      log(...labelParts.length? [`%c ${labelParts.join` `} `, labelStyle] : [],
+          ...isDOMel? [] : [val])
       if (isDOMel) dir(val)
       return val
     },
@@ -48,9 +52,10 @@
       let onresolve = _ => _,  onreject = _ => _
       const time = getTime(),  start = new Date,  body = 'response body',
         report =(res, status)=> {
-          log(...time == lastTime? [] : [lastTime = time],
+          const labelParts = [...time == lastTime? [] : [lastTime = time],
             ...typeof label=='string'? [label+':'] : typeof label=='number'?
-              [label+'.'] : [], `${status} in ${new Date()-start}ms`, res)
+              [label+'.'] : [], `${status} in ${new Date()-start}ms`]
+          log(`%c ${labelParts.join` `} `, labelStyle, res)
           if (res instanceof Response && res.status==200) {
             if ((res.headers.get('content-type')||'').startsWith('image/'))
               res.clone().blob().then(blob => assign(new FileReader(),
@@ -100,11 +105,12 @@
     img,  getTime,  get lastTime() { return lastTime },
 
     greet() {
-      log(`Hi. c4console is now ${ this.status() } and c4console.help() is there for you`)
+      log(`Hi. c4console is now %c ${ this.status() } `, labelStyle,
+        'and c4console.help() is there for you')
     },
 
     help() {
-      log(`c4console is now ${ this.status() }
+      log(`c4console is now %c ${ this.status() } `, labelStyle, `
 
 c4console provides following methods:
 
@@ -121,8 +127,7 @@ c4console functionality includes:
   c(...args) - global function like console.log but it also returns the stuff it outputs;
   any_variable_or_value.c(?label) - method available on (almost) any value that allows you to output that value to the console and that call is "transparent" for the chaining methdods - it returns the thing if was called from, so you can insert it in the middle of any expression without breaking anything;
   any_promise.c(?label) - method available on any promise that also outputs to the console the final status of the promise, time it took and its value, and, if it was a fetch response, it outputs the response body below - as text, json-parsed object/array or image;
-  console.img(src, ?size, ?label) - function to show images in console, prefers Base64 strings as a source but can also fetch images implicitly if url provided instead
-`
+  console.img(src, ?size, ?label) - function to show images in console, prefers Base64 strings as a source but can also fetch images implicitly if url provided instead`
       )
     }
   }
