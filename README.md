@@ -9,3 +9,5 @@
 Chainable `any_value.c()` for `console.log(value)` && return value in-place! MUCH more convenient than `console.log(...)` w/o vars or debugger when all you need is to see what's there at a point. Try it with promises! Also adds `c(...args)` function that are similar to `console.log` but returns what was passed into it as well.
 
 Browser versions also can autoenable/disable themselves on any page, show DOM elements as objects, preview fetch response body (as text, parsed json or image - yes, images are shown in console).
+
+You can [try it here](https://gitcdn.link/repo/UniBreakfast/c4console/browser-versions/index.html)
