@@ -1,17 +1,17 @@
 
 {
-  global.c =(...args)=>
-    console.log(...args) || args.length>1? args : args[0]
-
   let lastTime
-
-  const getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
+  const {log} = console,
+    getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
     def =(obj, prop, value)=> Object.defineProperty(obj, prop,
       {value, enumerable: false, editable: true, configurable: true})
 
+  global.c =(...args)=>
+    log(...args) || args.length>1? args : args[0]
+
   def(Object.prototype, 'c', function(label) {
     const time = getTime(),  val = this.valueOf()
-    console.log(...time == lastTime? [] : [lastTime = time],
+    log(...time == lastTime? [] : [lastTime = time],
       ...typeof label=='string'? [label+':'] : typeof label=='number'?
         [label+'.'] : [], val)
     return val
@@ -19,9 +19,9 @@
 
   def(Promise.prototype, 'c', function(label) {
     let onresolve = _ => _,  onreject = _ => _
-    const time = getTime(),  start = new Date,  body = 'response body',
+    const time = getTime(),  start = new Date,
       report =(res, status)=> {
-        console.log(...time == lastTime? [] : [lastTime = time],
+        log(...time == lastTime? [] : [lastTime = time],
           ...typeof label=='string'? [label+':'] : typeof label=='number'?
             [label+'.'] : [], `${status} in ${new Date()-start}ms`, res)
       },
