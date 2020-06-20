@@ -4,7 +4,7 @@
 // @match       *://*/*
 // @run-at      document-start
 // @grant       none
-// @version     3.0.7
+// @version     3.0.8
 // @author      Tut 'UniBreakfast' Ninin
 // @description 15.06.2020, 06:31:18
 // ==/UserScript==
@@ -55,8 +55,9 @@ if (!window.c4console) {
           const labelParts = [...time == lastTime? [] : [lastTime = time],
             ...typeof label=='string'? [label+':'] : typeof label=='number'?
               [label+'.'] : [], `${status} in ${new Date()-start}ms`]
-          log(`%c ${labelParts.join` `} `, labelStyle, res)
-          if (res instanceof Response && res.status==200) {
+          const fetched = res instanceof Response && res.status==200
+          log(`%c ${labelParts.join` `} `, labelStyle, fetched? [res] : res)
+          if (fetched) {
             if ((res.headers.get('content-type')||'').startsWith('image/'))
               res.clone().blob().then(blob => assign(new FileReader(),
                 {onload() { img(this.result, 0.4, body) }})

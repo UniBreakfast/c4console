@@ -44,8 +44,9 @@
           const labelParts = [...time == lastTime? [] : [lastTime = time],
             ...typeof label=='string'? [label+':'] : typeof label=='number'?
               [label+'.'] : [], `${status} in ${new Date()-start}ms`]
-          log(`%c ${labelParts.join` `} `, labelStyle, res)
-          if (res instanceof Response && res.status==200) {
+          const fetched = res instanceof Response && res.status==200
+          log(`%c ${labelParts.join` `} `, labelStyle, fetched? [res] : res)
+          if (fetched) {
             if ((res.headers.get('content-type')||'').startsWith('image/'))
               res.clone().blob().then(blob => assign(new FileReader(),
                 {onload() { img(this.result, 0.4, body) }})
