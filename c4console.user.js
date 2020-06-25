@@ -4,7 +4,7 @@
 // @match       *://*/*
 // @run-at      document-start
 // @grant       none
-// @version     3.1.0
+// @version     3.1.1
 // @author      Tut 'UniBreakfast' Ninin
 // @description 15.06.2020, 06:31:18
 // ==/UserScript==
