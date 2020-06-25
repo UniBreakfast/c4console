@@ -3,36 +3,39 @@
 
   const getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
 
+  const win = window,  c = console,  {log, dir} = c,  plan = setTimeout,
+    {defineProperty, assign} = Object,
+    objProto = Object.prototype,  promProto = Promise.prototype,
+    def =(obj, prop, value)=> defineProperty(obj, prop,
+      {value, enumerable: false, editable: true, configurable: true})
     labelStyle = `font-size:.6rem;font-weight:bold;color:#ee6d;background:#56ab;
       border-radius:4px;`,
+    getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
     img =(src, size=0.4, label=' ')=> {
       if (src.match(/^data:image\/.*;base64,/))
         return assign(new Image(), {src, onload() {
-          log(`%c${label}`, labelStyle+`background: no-repeat url(${src});
-            padding:0 ${this.width*size}px ${this.height*size}px 4px;
-              border-radius:0;background-size:contain`)
+          plan(log.bind(c, `%c${label}`, labelStyle+`background: no-repeat
+            url(${src}); padding:0 ${this.width*size}px ${this.height*size}px
+              4px;border-radius:0;background-size:contain`))
         }})
       fetch(src).then(r => r.blob()).then(blob => assign(new FileReader(),
         {onload() { img(this.result, size) }}).readAsDataURL(blob))
     },
 
-    {defineProperty, assign} = Object,  {log, dir} = console,
-    objProto = Object.prototype,  promProto = Promise.prototype,   win = window,
-    def =(obj, prop, value)=> defineProperty(obj, prop,
-      {value, enumerable: false, editable: true, configurable: true}),
-
   c4 = win.c4console = {
-    cGlobalFn: (...args)=> (args.length==1 && (args[0] instanceof Element ||
-      args[0]==document)? dir : log)(...args) || args.length>1? args : args[0],
+    cGlobalFn: (...args)=> plan((args.length==1 && (args[0] instanceof Element
+      || args[0] instanceof Attr ||args[0]==document)? dir : log)
+        .bind(c,...args)) && args.length>1? args : args[0],
 
     cGenericMethod(label) {
       const time = getTime(),  val = this.valueOf(),
-        isDOMel = val instanceof Element || val==document,
+        isDOMel = val instanceof Element || val instanceof Attr ||
+                    val==document,
         labelParts = [...time == lastTime? [] : [lastTime = time],
         ...typeof label=='string'? [label+':'] : typeof label=='number'?
           [label+'.'] : []]
-      log(...labelParts.length? [`%c ${labelParts.join` `} `, labelStyle] : [],
-          ...isDOMel? [] : [val])
+      plan(log.bind(c,...labelParts.length? [`%c ${labelParts.join` `} `,
+        labelStyle] : [], ...isDOMel? [] : [val]))
       if (isDOMel) dir(val)
       return val
     },
@@ -43,9 +46,10 @@
         report =(res, status)=> {
           const labelParts = [...time == lastTime? [] : [lastTime = time],
             ...typeof label=='string'? [label+':'] : typeof label=='number'?
-              [label+'.'] : [], `${status} in ${new Date()-start}ms`]
-          const fetched = res instanceof Response && res.status==200
-          log(`%c ${labelParts.join` `} `, labelStyle, fetched? [res] : res)
+              [label+'.'] : [], `${status} in ${new Date()-start}ms`],
+                fetched = res instanceof Response
+          plan(log.bind(c,`%c ${labelParts.join` `} `, labelStyle,
+            fetched? [res] : res))
           if (fetched) {
             if ((res.headers.get('content-type')||'').startsWith('image/'))
               res.clone().blob().then(blob => assign(new FileReader(),
