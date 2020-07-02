@@ -4,7 +4,7 @@
 // @match       *://*/*
 // @run-at      document-start
 // @grant       none
-// @version     3.1.1
+// @version     3.1.2
 // @author      Tut 'UniBreakfast' Ninin
 // @description 15.06.2020, 06:31:18
 // ==/UserScript==
@@ -16,7 +16,7 @@ if (!window.c4console) {
     ls = localStorage,  {defineProperty, assign} = Object,
     objProto = Object.prototype,  promProto = Promise.prototype,
     def =(obj, prop, value)=> defineProperty(obj, prop,
-      {value, enumerable: false, editable: true, configurable: true})
+      {value, enumerable: false, editable: true, configurable: true}),
     labelStyle = `font-size:.6rem;font-weight:bold;color:#ee6d;background:#56ab;
       border-radius:4px;`,
     getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),

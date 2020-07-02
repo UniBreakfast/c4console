@@ -7,7 +7,7 @@
     {defineProperty, assign} = Object,
     objProto = Object.prototype,  promProto = Promise.prototype,
     def =(obj, prop, value)=> defineProperty(obj, prop,
-      {value, enumerable: false, editable: true, configurable: true})
+      {value, enumerable: false, editable: true, configurable: true}),
     labelStyle = `font-size:.6rem;font-weight:bold;color:#ee6d;background:#56ab;
       border-radius:4px;`,
     getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
