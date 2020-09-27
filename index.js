@@ -4,7 +4,7 @@
   const {log} = console,
     getTime =()=> new Date().toLocaleTimeString('en', {hour12: false}),
     def =(obj, prop, value)=> Object.defineProperty(obj, prop,
-      {value, enumerable: false, editable: true, configurable: true})
+      {value, enumerable: false, writable: true, configurable: true})
 
   global.c =(...args)=>
     log(...args) || args.length>1? args : args[0]
