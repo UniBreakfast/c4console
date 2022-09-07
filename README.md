@@ -10,4 +10,5 @@ Chainable `any_value.c()` for `console.log(value)` && return value in-place! MUC
 
 Browser versions also can autoenable/disable themselves on any page, show DOM elements as objects, preview fetch response body (as text, parsed json or image - yes, images are shown in console).
 
-You can [try it here](https://gitcdn.link/repo/UniBreakfast/c4console/browser-versions/index.html)
+You can [try it here](https://gitcdn.link/repo/UniBreakfast/c4console/browser-versions/index.html),
+examples and different versions are [here](https://gist.github.com/UniBreakfast/643abb8a892742d12b3e12306cab5499)
